@@ -40,7 +40,7 @@ if (DDS_CARD_SECTION) {
         <CardSection
           title={cardsTitle}
           cards={cards[type]}
-          data={data}
+          // data={data}
           theme={theme}
         />
       );
