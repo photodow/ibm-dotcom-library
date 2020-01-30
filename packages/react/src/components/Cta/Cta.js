@@ -22,22 +22,31 @@ import React from 'react';
  * @param {object} props.cta cta object which includes url, link text and target properties.
  * @returns {*} CTA Component
  */
-const CTA = ({ style, cta }) =>
+const CTA = ({ style, type, ...cta }) =>
   style === 'card' ? (
-    <CardLink {...cta} icon={iconSelector(cta.type)} />
+    <CardLink {...cta} icon={iconSelector(type)} />
   ) : style === 'button' ? (
-    <ButtonGroup buttons={renderButton(cta)} />
+    <ButtonGroup buttons={renderButtons(cta)} />
   ) : style === 'feature' ? (
     <FeaturedLink
       {...cta}
-      //icon={iconSelector(cta.type)}
+      //icon={iconSelector(type)}
     />
   ) : (
     <LinkWithIcon href={cta.href}>
       {cta.copy}
-      {iconSelector(cta.type)}
+      {iconSelector(type)}
     </LinkWithIcon>
   );
+/**
+ * TEMPORARY sets icon based on link type
+ *
+ * @param {string} type cta type ( external | jump | local)
+ * @returns {*} cta type component
+ */
+const TEMP_iconSelector = type =>
+  type === 'external' ? Launch20 : type === 'jump' ? ArrowDown20 : ArrowRight20;
+
 /**
  * sets icon based on link type
  *
@@ -45,11 +54,13 @@ const CTA = ({ style, cta }) =>
  * @returns {*} cta type component
  */
 const iconSelector = type =>
-  type === 'external'
-    ? { Launch20 }
-    : type === 'jump'
-    ? { ArrowDown20 }
-    : { ArrowRight20 };
+  type === 'external' ? (
+    <Launch20 />
+  ) : type === 'jump' ? (
+    <ArrowDown20 />
+  ) : (
+    <ArrowRight20 />
+  );
 
 /**
  * sets button
@@ -57,11 +68,10 @@ const iconSelector = type =>
  * @param {object} cta object with buttons array
  * @returns {*} object
  */
-const renderButton = cta =>
-  cta.map(obj => {
-    obj.renderIcon = iconSelector(cta.type);
-    console.log('renderButton', obj);
-    return obj;
+const renderButtons = ({ buttons }) =>
+  buttons.map(button => {
+    button.renderIcon = TEMP_iconSelector(button.type);
+    return button;
   });
 
 CTA.propTypes = {
